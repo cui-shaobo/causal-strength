@@ -1,16 +1,36 @@
-# This is a sample Python script.
+import torch
+from transformers import AutoTokenizer
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from causalstrength import CESAR
+from causalstrength.models import CESARConfig
 
+# Load the tokenizer
+tokenizer = AutoTokenizer.from_pretrained('YourUsername/cesar-model')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# Load the model
+config = CESARConfig.from_pretrained('YourUsername/cesar-model')
+model = CESAR.from_pretrained('YourUsername/cesar-model', config=config)
 
+# Prepare inputs
+s1 = "Fire starts."
+s2 = "House burns."
+encoded_inputs = tokenizer(
+    s1,
+    s2,
+    return_tensors='pt',
+    padding='max_length',
+    truncation=True,
+    max_length=128,
+    add_special_tokens=True
+)
+input_ids = encoded_inputs['input_ids']
+attention_mask = encoded_inputs['attention_mask']
+token_type_ids = encoded_inputs['token_type_ids']
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# Evaluate causal strength
+model.eval()
+with torch.no_grad():
+    outputs = model(input_ids, attention_mask, token_type_ids)
+    causal_strength = outputs['causal_strength']
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+print(f'Causal strength between \"{s1}\" and \"{s2}\" is {causal_strength.item()}')
