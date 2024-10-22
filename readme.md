@@ -15,6 +15,32 @@
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
+## Reference
+
+If you find this package helpful, please star [this repository](https://github.com/cui-shaobo/causalstrength) and the related repository: [defeasibility-in-causality](https://github.com/cui-shaobo/defeasibility-in-causality). For academic purposes, please cite our paper:
+
+```bibtex
+@inproceedings{cui-etal-2024-exploring,
+    title = "Exploring Defeasibility in Causal Reasoning",
+    author = "Cui, Shaobo  and
+      Milikic, Lazar  and
+      Feng, Yiyang  and
+      Ismayilzada, Mete  and
+      Paul, Debjit  and
+      Bosselut, Antoine  and
+      Faltings, Boi",
+    booktitle = "Findings of the Association for Computational Linguistics ACL 2024",
+    month = aug,
+    year = "2024",
+    address = "Bangkok, Thailand and virtual meeting",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-acl.384",
+    doi = "10.18653/v1/2024.findings-acl.384",
+    pages = "6433--6452",
+}
+```
+
+
 ## Features
 
 - **Causal Strength Evaluation**: Compute the causal strength between two statements using models like CESAR.
