@@ -1,0 +1,5 @@
+build
+dist
+goodtitle.egg-info
+*.xml
+*.iml
