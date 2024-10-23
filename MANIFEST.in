@@ -1,0 +1,17 @@
+include README.md
+include requirements.txt
+include setup.py
+recursive-include causalstrength *
+
+prune build
+prune dist
+prune cesar-model
+prune cesar_model
+prune data
+prune figures
+prune models
+prune api_key
+
+exclude *.py
+include setup.py
+include download_ceq_data.py

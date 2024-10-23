@@ -66,7 +66,7 @@ if __name__ == "__main__":
     effects_checksum = '1af3660ce51a18b1ffc8b34105fc4d0850b6b3fbf7769ce0d8028c5d7133f6af'
 
 
-    data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+    data_dir = os.path.join(os.path.dirname(__file__), '', 'data')
     os.makedirs(data_dir, exist_ok=True)
 
     causes_zip_path = os.path.join(data_dir, 'causes.pkl.zip')
