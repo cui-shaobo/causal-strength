@@ -6,4 +6,5 @@
 """
 
 from .models import CESAR
+from .models import CESARConfig
 from .evaluator import evaluate

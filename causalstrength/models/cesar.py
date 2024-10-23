@@ -1,21 +1,34 @@
-"""
-@Project  : causalstrength
-@File     : models.py
-@Author   : Shaobo Cui
-@Date     : 22.10.2024 14:43
-"""
+# modeling_cesar.py
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import AutoModelForCausalLM, PreTrainedModel, AutoConfig
+from transformers import (
+    BertModel,
+    BertConfig,
+    PreTrainedModel,
+    PretrainedConfig,
+)
 
-class CESARConfig(AutoConfig):
+class CESARConfig(PretrainedConfig):
     model_type = "cesar"
 
-    def __init__(self, causal_attention=True, return_inner_scores=False, **kwargs):
+    def __init__(
+        self,
+        bert_model_name="bert-large-uncased",
+        causal_attention=True,
+        return_inner_scores=True,
+        **kwargs
+    ):
         super().__init__(**kwargs)
+        self.bert_model_name = bert_model_name
         self.causal_attention = causal_attention
         self.return_inner_scores = return_inner_scores
+
+        # Load the BertConfig
+        self.bert_config = BertConfig.from_pretrained(
+            bert_model_name, output_hidden_states=True
+        )
 
 class CESAR(PreTrainedModel):
     config_class = CESARConfig
@@ -23,42 +36,71 @@ class CESAR(PreTrainedModel):
 
     def __init__(self, config):
         super().__init__(config)
-        self.encoder = AutoModelForCausalLM.from_pretrained('bert-large-uncased')
+        # Initialize the encoder with pre-trained weights
+        self.encoder = BertModel.from_pretrained(config.bert_model_name, config=config.bert_config)
+        self.return_inner_scores = config.return_inner_scores
 
         if config.causal_attention:
             embedding_dim = self.encoder.config.hidden_size
             self.q = nn.Linear(embedding_dim, embedding_dim)
             self.k = nn.Linear(embedding_dim, embedding_dim)
-        else:
-            self.q = None
-            self.k = None
 
-    def forward(self, input_ids, attention_mask=None, token_type_ids=None, labels=None):
+    def forward(self, input_ids, attention_mask, token_type_ids):
         outputs = self.encoder(
             input_ids=input_ids,
             attention_mask=attention_mask,
             token_type_ids=token_type_ids,
-            labels=labels
         )
         embeddings = outputs.last_hidden_state
 
         cs = []
-        for embedding, attention, token_type in zip(embeddings, attention_mask, token_type_ids):
-            tokens_mask = (attention == 1)
-            first_sentence_emb = embedding[(tokens_mask) & (token_type == 0)]
-            second_sentence_emb = embedding[(tokens_mask) & (token_type == 1)]
+        for embedding, attention, token_type in zip(
+            embeddings, attention_mask, token_type_ids
+        ):
+            tokens_mask = attention.bool()
+            first_sentence_mask = torch.logical_and(tokens_mask, token_type == 0)
+            second_sentence_mask = torch.logical_and(tokens_mask, token_type == 1)
 
-            first_norm = F.normalize(first_sentence_emb, p=2, dim=1)
-            second_norm = F.normalize(second_sentence_emb, p=2, dim=1)
+            first_sentence_embedding = embedding[first_sentence_mask]
+            second_sentence_embedding = embedding[second_sentence_mask]
 
-            score = torch.abs(first_norm @ second_norm.T)
-            if self.q is not None and self.k is not None:
-                q = self.q(first_sentence_emb)
-                k = self.k(second_sentence_emb)
-                attn = F.softmax(q @ k.T, dim=-1)
+            first_norm = F.normalize(first_sentence_embedding, p=2, dim=1)
+            second_norm = F.normalize(second_sentence_embedding, p=2, dim=1)
+
+            score = torch.abs(
+                torch.matmul(first_norm.unsqueeze(0), second_norm.T.unsqueeze(0))
+            ).squeeze(0)
+
+            if hasattr(self, "q") and hasattr(self, "k"):
+
+                q = self.q(first_sentence_embedding)
+                k = self.k(second_sentence_embedding)
+                attn = q @ k.T
+                attn = F.softmax(attn.flatten(), dim=0).view(attn.shape)
+
+                if attn.shape != score.shape:
+                    raise ValueError(
+                        f"Tensors must be of the same shape but got {attn.shape} and {score.shape}"
+                    )
+
                 cs.append(torch.sum(attn * score))
             else:
                 cs.append(score.mean())
 
         cs = torch.stack(cs)
-        return {'causal_strength': cs}
+        print('*#' * 20)
+        print(self.return_inner_scores, hasattr(self, "q"), hasattr(self, "k"))
+        if self.return_inner_scores and hasattr(self, "q") and hasattr(self, "k"):
+            return cs, attn, score
+        elif self.return_inner_scores:
+            return cs, score
+        else:
+            return cs
+
+    # @classmethod
+    # def from_pretrained(cls, *args, **kwargs):
+    #     # Load the custom config
+    #     config = CESARConfig.from_pretrained(*args, **kwargs)
+    #     # Initialize the model with pre-trained encoder
+    #     model = super().from_pretrained(config.bert_model_name, config=config, *args, **kwargs)
+    #     return model

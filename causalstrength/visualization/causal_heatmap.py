@@ -1,60 +1,118 @@
 """
 @Project  : causalstrength
-@File     : causal_heatmap.py
+@File     : plot_heatmap.py
 @Author   : Shaobo Cui
-@Date     : 22.10.2024 15:47
+@Date     : 22.10.2024 15:34
 """
+
 import torch
 import matplotlib.pyplot as plt
+import matplotlib
+# Set the backend to 'Agg' before importing pyplot
+matplotlib.use('Agg')
+
 import seaborn as sns
-from transformers import AutoTokenizer
-from ..models.cesar import CESAR
+import os
 
-def generate_causal_heatmap(s1, s2, model_name='YourUsername/cesar-model', save_path='causal_heatmap.pdf'):
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    model = CESAR(model_name=model_name, causal_attention=True, return_inner_scores=True)
-    model.to(device)
-    model.eval()
+def plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, save_path):
+    """
+    Generate and save heatmap plots for CESAR model evaluations.
 
-    encoded_inputs = tokenizer(
-        s1,
-        s2,
-        add_special_tokens=True,
-        truncation=True,
-        padding="max_length",
-        max_length=128,
-        return_tensors="pt"
+    Parameters:
+    - score_map (torch.Tensor): Embedding cosine similarities tensor with shape [cause_length, effect_length].
+    - attn_map (torch.Tensor): Attention scores tensor with shape [cause_length, effect_length].
+    - cause_tokens (list of str): Tokens from the cause statement.
+    - effect_tokens (list of str): Tokens from the effect statement.
+    - causal_strength (float): The causal strength score.
+    - save_path (str): File path to save the heatmap plot.
+    """
+    # Convert tensors to numpy arrays and detach from computation graph
+    score_map_np = score_map.detach().cpu().numpy()
+    attn_map_np = attn_map.detach().cpu().numpy()
+    result = score_map_np * attn_map_np
+
+    # Apply thresholding to remove negligible values
+    threshold = 1e-3
+    score_map_np[score_map_np < threshold] = 0
+    attn_map_np[attn_map_np < threshold] = 0
+    result[result < threshold] = 0
+
+    cause_tokens = ['CLS'] + cause_tokens + ['EOS']
+    effect_tokens = effect_tokens + ['EOS']
+
+    num_cause = len(cause_tokens)
+    num_effect = len(effect_tokens)
+
+
+
+    # Adjust figure size based on the number of tokens
+    # Prevent excessively large or small figures
+    figsize = max(18, num_effect * 0.5), max(6, num_cause * 0.5)
+
+    # Create subplots
+    fig, axs = plt.subplots(1, 3, figsize=figsize)
+
+    # Heatmap for Embedding Cosine Similarities
+    sns.heatmap(
+        score_map_np,
+        yticklabels=cause_tokens,
+        xticklabels=effect_tokens,
+        center=0.5,
+        cmap='viridis',
+        ax=axs[0],
+        annot=False,  # Disable annotations for clarity
+        fmt=".2f"
     )
+    axs[0].set_title("Embedding Cosine Similarities", fontsize=14)
+    axs[0].tick_params(axis='y', rotation=0)
+    axs[0].tick_params(axis='x', rotation=90)
 
-    input_ids = encoded_inputs['input_ids'].to(device)
-    attention_mask = encoded_inputs['attention_mask'].to(device)
-    token_type_ids = encoded_inputs.get('token_type_ids', None)
-    if token_type_ids is not None:
-        token_type_ids = token_type_ids.to(device)
+    # Heatmap for Attention Scores
+    sns.heatmap(
+        attn_map_np,
+        yticklabels=cause_tokens,
+        xticklabels=effect_tokens,
+        center=0.5,
+        cmap='viridis',
+        ax=axs[1],
+        annot=False,  # Disable annotations for clarity
+        fmt=".2f"
+    )
+    axs[1].set_title("Attention Scores", fontsize=14)
+    axs[1].tick_params(axis='y', rotation=0)
+    axs[1].tick_params(axis='x', rotation=90)
 
-    # Run the model and obtain scores
-    score, attn_map, score_map = model(input_ids, attention_mask, token_type_ids)
-    result = score_map * attn_map
+    # Heatmap for Causal Strength (Product of Scores and Attention)
+    # print(cause_tokens)
+    # print(effect_tokens)
 
-    # Process attention and score maps for visualization
-    attn_map[attn_map < 1e-3] = 0
-    score_map[score_map < 1e-3] = 0
-    result[result < 1e-3] = 0
+    print(cause_tokens)
+    print(effect_tokens)
+    sns.heatmap(
+        result,
+        yticklabels=cause_tokens,
+        xticklabels=effect_tokens,
+        center=0.5,
+        cmap='viridis',
+        ax=axs[2],
+        annot=False,  # Disable annotations for clarity
+        fmt=".2f"
+    )
+    axs[2].set_title(f"Causal Strength: {causal_strength:.2f}", fontsize=14)
+    axs[2].tick_params(axis='y', rotation=0)
+    axs[2].tick_params(axis='x', rotation=90)
 
-    # Get tokens for labels
-    tokens_s1 = tokenizer.tokenize(s1)
-    tokens_s2 = tokenizer.tokenize(s2)
+    # Highlight Special Tokens
 
-    # Plot heatmaps
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
-    sns.heatmap(score_map.cpu().numpy(), yticklabels=tokens_s1, xticklabels=tokens_s2, ax=axs[0])
-    axs[0].set_title('Embedding Cosine Similarities')
-    sns.heatmap(attn_map.cpu().numpy(), yticklabels=tokens_s1, xticklabels=tokens_s2, ax=axs[1])
-    axs[1].set_title('Attention Scores')
-    sns.heatmap(result.cpu().numpy(), yticklabels=tokens_s1, xticklabels=tokens_s2, ax=axs[2])
-    axs[2].set_title(f'Causal Strength: {score.item():.2f}')
+    # Adjust layout
     plt.tight_layout()
+
+    # Ensure the figures directory exists
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+    # Save the figure
     plt.savefig(save_path)
-    plt.close(fig)
+    plt.close(fig)  # Close the figure to free memory
+
+    print(f"Heatmap saved to {save_path}")

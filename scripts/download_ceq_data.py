@@ -5,20 +5,6 @@
 @Date     : 23.10.2024 16:18
 """
 
-"""
-@Project  : causalstrength
-@File     : download_ceq_data.py
-@Author   : Shaobo Cui
-@Date     : 23.10.2024 16:18
-"""
-
-"""
-@Project  : causalstrength
-@File     : download_ceq_data.py
-@Author   : Shaobo Cui
-@Date     : 23.10.2024 16:18
-"""
-
 import os
 import zipfile
 import hashlib
