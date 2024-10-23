@@ -15,7 +15,7 @@
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
-## Reference
+## Citation
 
 If you find this package helpful, please star [this repository](https://github.com/cui-shaobo/causalstrength) and the related repository: [defeasibility-in-causality](https://github.com/cui-shaobo/defeasibility-in-causality). For academic purposes, please cite our paper:
 
@@ -128,6 +128,10 @@ generate_causal_heatmap(
 )
 ```
 
-## Acknowledgments
-+ HuggingFace Transformers - For providing the model hub and transformer implementations
-+ PyTorch - For providing the deep learning framework
+[//]: # (## Acknowledgments)
+
+[//]: # (+ HuggingFace Transformers - For providing the model hub and transformer implementations)
+
+[//]: # (+ PyTorch - For providing the deep learning framework)
+
+## References

@@ -9,8 +9,8 @@ def compute_checksum(file_path):
     return calculated_checksum
 
 # Example usage:
-causes_checksum = compute_checksum('path/to/causes.pkl')
-effects_checksum = compute_checksum('path/to/effects.pkl')
+causes_checksum = compute_checksum('data/groundtruth/causes.pkl')
+effects_checksum = compute_checksum('data/groundtruth/effects.pkl')
 
 print('causes.pkl checksum:', causes_checksum)
 print('effects.pkl checksum:', effects_checksum)
