@@ -44,7 +44,6 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if model_name == 'CESAR':
-        # Determine the model identifier
         model_identifier = model_path if model_path is not None else 'huggingfacesc/cesar-model'
         # Load the tokenizer
         try:
@@ -54,7 +53,12 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
 
         # Load the CESAR model using from_pretrained
         try:
+            print('*#'*40)
+            print('Start to load model from {}'.format(model_identifier))
+            print('*#'*40)
             model = CESAR.from_pretrained(model_identifier)
+            print('Finish the model loading process!')
+            print('*#'*40)
         except Exception as e:
             raise RuntimeError(f"Failed to load CESAR model from '{model_identifier}'. Error: {e}")
 
@@ -168,7 +172,7 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
                 heatmap_path = f'figures/causal_heatmap_{safe_s1.replace(" ", "_")}_to_{safe_s2.replace(" ", "_")}.pdf'
 
             # Generate heatmap
-            print('*#' * 20)
+            # print('*#' * 20)
             plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, heatmap_path)
 
         return causal_strength

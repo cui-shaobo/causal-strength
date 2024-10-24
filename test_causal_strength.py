@@ -7,8 +7,8 @@
 from causalstrength import evaluate
 
 # For CESAR
-s1 = "The rain caused the flooding."
-s2 = "The streets were flooded."
+s1 = "Tom is very full now."
+s2 = "He goes to McDonald for some food."
 cesar_score = evaluate(s1, s2, model_name='CESAR', model_path='cesar-model')
 print(f'CESAR Causal strength: {cesar_score}')
 
