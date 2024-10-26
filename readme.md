@@ -1,6 +1,14 @@
-# causalstrength
+# Measure the Strength Between Cause and Effect
 
-**causalstrength** is a Python package for evaluating the causal strength between statements using various metrics such as CESAR (Causal Embedding Similarity with Attention Reweighting). This package leverages pre-trained models available on [Hugging Face Transformers](https://huggingface.co/) for efficient and scalable computations.
+<a href="https://aclanthology.org/2024.findings-acl.384/">
+    <img src="https://img.shields.io/badge/2024.findings-acl.384-blue.svg?style=flat-square" alt="ACL Anthology" />
+</a>
+<a href="https://pypi.org/project/causal-strength/">
+    <img src="https://img.shields.io/pypi/v/causal-strength?style=flat-square" alt="PyPI version" />
+</a>
+
+
+**causal-strength** is a Python package for evaluating the causal strength between statements using various metrics such as CESAR (Causal Embedding Similarity with Attention Reweighting). This package leverages pre-trained models available on [Hugging Face Transformers](https://huggingface.co/) for efficient and scalable computations.
 
 ## Table of Contents
 
