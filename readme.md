@@ -13,16 +13,21 @@
 
 ## Table of Contents
 
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Usage](#usage)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [📜 Citation *](#-citation-)
+- [🌟 Features *](#-features-)
+- [🚀 Installation *](#-installation-)
+  - [Prerequisites](#prerequisites)
+  - [Steps](#steps)
+- [🛠️ Usage  *](#-usage--)
+  - [Quick Start](#quick-start)
   - [Evaluating Causal Strength](#evaluating-causal-strength)
   - [Generating Causal Heatmaps](#generating-causal-heatmaps)
-- [Adding New Metrics](#adding-new-metrics)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+- [References](#references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 📜 Citation ![Citation](https://img.shields.io/badge/Citation-Required-green) 
 
@@ -67,16 +72,18 @@ If you find this package helpful, please star this repository [causal-strength](
 
 ### Steps
 
-1. **Clone the Repository**
+1. **Install it directly from PyPI**
+    ```bash
+    pip install causal-strength
+    ```
+
+2. **Install it from source code**
 
    ```bash
-   git clone https://github.com/yourusername/causalstrength.git
+   git clone https://github.com/cui-shaobo/causal-strength.git
    cd causal-strength
+   pip install .
    ```
-
-2. **Install the Package**
-
-
 
 
 ## 🛠️ Usage  ![Usage](https://img.shields.io/badge/Usage-Instructions-green)
@@ -100,17 +107,31 @@ print(f'Causal strength between "{cause}" and "{effect}" is {score:.2f}')
 
 The `evaluate` function computes the causal strength between two statements.
 
-```python
-from causalstrength import evaluate
+1. For the CESAR model. 
 
-# Statements to evaluate
-s1 = "Rain falls."
-s2 = "Ground gets wet."
+    ```python
+    from causalstrength import evaluate
+    
+    # Test CESAR Model
+    s1_cesar = "Tom is very full now."
+    s2_cesar = "He goes to McDonald for some food."
+    
+    print("Testing CESAR model:")
+    cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large')
+    print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
+    ```
+2. For the CEQ model
+   ```python
+    from causalstrength import evaluate
 
-# Evaluate using CESAR model from Hugging Face
-score = evaluate(s1, s2, model_name='CESAR', model_path='YourUsername/cesar-model')
-print(f'Causal strength: {score:.2f}')
-```
+    # Test CEQ Model
+    s1_ceq = "Tom eats too much food."
+    s2_ceq = "He feels sick."
+    
+    print("\nTesting CEQ model:")
+    ceq_score = evaluate(s1_ceq, s2_ceq, model_name='CEQ')
+    print(f"CEQ Causal strength between \"{s1_ceq}\" and \"{s2_ceq}\": {ceq_score:.4f}")
+    ```
 
 **Parameters:**
 
