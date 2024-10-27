@@ -173,6 +173,16 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
                 # Assume [cause_seq, effect_seq]
                 # print(cause_indices, effect_indices)
                 # print(score_map.size())
+                # print(score_map.size(), attn_map.size())
+                # print(cause_indices, effect_indices)
+                # score_map = score_map[cause_indices, :][:, effect_indices]
+                # attn_map = attn_map[cause_indices, :][:, effect_indices]
+                # Ensure that the cause_indices and effect_indices are of the same length as the score_map
+                # cause_indices = cause_indices[:score_map.shape[0]]
+                # effect_indices = effect_indices[:score_map.shape[1]]
+                #
+                # print(cause_indices, effect_indices)
+                # # Now, apply the mask to the score_map
                 # score_map = score_map[cause_indices, :][:, effect_indices]
                 # attn_map = attn_map[cause_indices, :][:, effect_indices]
                 pass
@@ -184,7 +194,9 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
             # print(f"Sliced attn_map shape: {attn_map.shape}")
 
             # Check if the sliced score_map and attn_map match the number of tokens
-            if score_map.shape[0] != len(cause_tokens) or score_map.shape[1] != len(effect_tokens):
+            # print(cause_tokens, effect_tokens)
+            # print(len(cause_tokens), len(effect_tokens), score_map.size())
+            if score_map.shape[0] != len(cause_tokens) + 2 or score_map.shape[1] != len(effect_tokens) + 1:
                 print("Warning: The sliced score_map dimensions do not match the number of tokens.")
 
             # Set default heatmap path if not provided

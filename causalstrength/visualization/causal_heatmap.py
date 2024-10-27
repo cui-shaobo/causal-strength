@@ -64,7 +64,7 @@ def plot_causal_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal
         annot=False,  # Disable annotations for clarity
         fmt=".2f"
     )
-    axs[0].set_title("Embedding Cosine Similarities", fontsize=14)
+    axs[0].set_title("Causal Embedding Association", fontsize=14)
     axs[0].tick_params(axis='y', rotation=0)
     axs[0].tick_params(axis='x', rotation=90)
 

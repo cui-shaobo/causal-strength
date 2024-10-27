@@ -8,8 +8,8 @@
 from causalstrength import evaluate
 
 # Test CESAR Model
-s1_cesar = "Tom is very hungry now."
-s2_cesar = "He goes to McDonald for some food."
+s1_cesar = "Fire starts quickly."
+s2_cesar = "House burns to ashes."
 
 print("Testing CESAR model:")
 cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large',
