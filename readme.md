@@ -1,4 +1,5 @@
-# causal-strength  ![Causal Strength](https://img.shields.io/badge/causal--strength-%E2%9A%96%EF%B8%8F%20measurement%20of%20causality-blue)  Measure the Strength Between Cause and Effect
+<small>EN | [简体中文](README_zh.md) </small>
+# causal-strength  ![Causal Strength](https://img.shields.io/badge/causal--strength-%E2%9A%96%EF%B8%8F%20measurement%20of%20causality-blue) : Measure the Strength Between Cause and Effect
 
 <a href="https://aclanthology.org/2024.findings-acl.384/">
     <img src="https://img.shields.io/badge/2024.findings-acl.384-blue.svg?style=flat-square" alt="ACL Anthology" />
@@ -9,7 +10,8 @@
 
 
 
-**causal-strength** is a Python package for evaluating the causal strength between statements using various metrics such as CESAR (Causal Embedding Similarity with Attention Reweighting). This package leverages pre-trained models available on [Hugging Face Transformers](https://huggingface.co/) for efficient and scalable computations.
+**causal-strength** is a Python package for evaluating the causal strength between statements using various metrics such as CESAR (Causal Embedding aSsociation
+with Attention Rating). This package leverages pre-trained models available on [Hugging Face Transformers](https://huggingface.co/) for efficient and scalable computations.
 
 ## Table of Contents
 
@@ -21,11 +23,11 @@
 - [🚀 Installation *](#-installation-)
   - [Prerequisites](#prerequisites)
   - [Steps](#steps)
-- [🛠️ Usage  *](#-usage-)
+- [🛠️ Usage  *](#-usage--)
   - [Quick Start](#quick-start)
   - [Evaluating Causal Strength](#evaluating-causal-strength)
   - [Generating Causal Heatmaps](#generating-causal-heatmaps)
-- [References](#references)
+- [📚 References *](#-references-)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -144,21 +146,21 @@ The `evaluate` function computes the causal strength between two statements.
 
 Visualize the attention and similarity scores between tokens using heatmaps.
 
-```python
-from causalstrength.visualization.causal_heatmap import generate_causal_heatmap
-
-# Statements to visualize
-s1 = "Fire starts."
-s2 = "House burns."
-
-# Generate heatmap
-generate_causal_heatmap(
-    s1,
-    s2,
-    model_name='YourUsername/cesar-model',
-    save_path='causal_heatmap.pdf'
-)
-```
+    ```python
+    from causalstrength.visualization.causal_heatmap import generate_causal_heatmap
+    
+    # Statements to visualize
+    s1 = "Fire starts."
+    s2 = "House burns."
+    
+    # Generate heatmap
+    generate_causal_heatmap(
+        s1,
+        s2,
+        model_name='YourUsername/cesar-model',
+        save_path='causal_heatmap.pdf'
+    )
+    ```
 
 [//]: # (## Acknowledgments)
 
@@ -166,4 +168,7 @@ generate_causal_heatmap(
 
 [//]: # (+ PyTorch - For providing the deep learning framework)
 
-## References
+
+## 📚 References ![References](https://img.shields.io/badge/References-Scholarly-green)
+1. Cui, Shaobo, et al. "Exploring Defeasibility in Causal Reasoning." Findings of the Association for Computational Linguistics ACL 2024. 2024. 
+2. Du, Li, et al. "e-CARE: a New Dataset for Exploring Explainable Causal Reasoning." Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). 2022.
