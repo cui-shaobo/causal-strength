@@ -21,7 +21,7 @@
 - [🚀 Installation *](#-installation-)
   - [Prerequisites](#prerequisites)
   - [Steps](#steps)
-- [🛠️ Usage  *](#-usage--)
+- [🛠️ Usage  *](#-usage-)
   - [Quick Start](#quick-start)
   - [Evaluating Causal Strength](#evaluating-causal-strength)
   - [Generating Causal Heatmaps](#generating-causal-heatmaps)
