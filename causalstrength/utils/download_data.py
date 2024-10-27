@@ -1,88 +1,112 @@
-import requests
 import os
-from tqdm import tqdm
+import zipfile
 import hashlib
+import gdown
 
-def download_ceq_data(data_dir='data'):
+# Default data directory (hidden folder in the user's home directory)
+DEFAULT_DATA_DIR = os.path.expanduser('~/.causalstrength/data/')
+
+def download_file_from_google_drive(file_id, destination):
     """
-    Downloads the causes.pkl and effects.pkl files required for the CEQ model.
+    Downloads a file from Google Drive using gdown.
 
     Parameters:
-    - data_dir (str): The directory where data files will be stored.
+    - file_id (str): The Google Drive file ID.
+    - destination (str): The local path where the file will be saved.
     """
-    # Google Drive file IDs for causes.pkl and effects.pkl
-    causes_file_id = 'your_causes_file_id_here'   # Replace with your actual file ID
-    effects_file_id = 'your_effects_file_id_here'  # Replace with your actual file ID
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, destination, quiet=False)
 
-    # Expected SHA256 checksums for causes.pkl and effects.pkl
-    causes_checksum = 'your_causes_checksum_here'   # Replace with the actual checksum
-    effects_checksum = 'your_effects_checksum_here'  # Replace with the actual checksum
+def unzip_file(zip_path, extract_to):
+    """
+    Unzips a ZIP file to the specified directory.
 
-    os.makedirs(data_dir, exist_ok=True)
+    Parameters:
+    - zip_path (str): The path to the ZIP file.
+    - extract_to (str): The directory where the contents will be extracted.
+    """
+    print(f'Unzipping {os.path.basename(zip_path)}...')
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_to)
+    print(f'Unzipped to {extract_to}')
+    os.remove(zip_path)  # Remove the ZIP file after extraction
+    print(f'Removed {os.path.basename(zip_path)}')
 
-    causes_path = os.path.join(data_dir, 'causes.pkl')
-    effects_path = os.path.join(data_dir, 'effects.pkl')
+def verify_checksum(file_path, expected_checksum):
+    """
+    Verifies the SHA256 checksum of a file.
 
-    print("Downloading causes.pkl...")
-    _download_file_from_google_drive(causes_file_id, causes_path)
+    Parameters:
+    - file_path (str): Path to the file to verify.
+    - expected_checksum (str): The expected SHA256 checksum.
 
-    # Verify the checksum of causes.pkl
-    if _verify_file(causes_path, causes_checksum):
-        print("causes.pkl downloaded and verified successfully.")
-    else:
-        print("Error: causes.pkl checksum verification failed.")
-        os.remove(causes_path)
-        raise ValueError("Downloaded causes.pkl file is corrupted. Please try downloading again.")
-
-    print("Downloading effects.pkl...")
-    _download_file_from_google_drive(effects_file_id, effects_path)
-
-    # Verify the checksum of effects.pkl
-    if _verify_file(effects_path, effects_checksum):
-        print("effects.pkl downloaded and verified successfully.")
-    else:
-        print("Error: effects.pkl checksum verification failed.")
-        os.remove(effects_path)
-        raise ValueError("Downloaded effects.pkl file is corrupted. Please try downloading again.")
-
-def _download_file_from_google_drive(file_id, destination):
-    URL = "https://docs.google.com/uc?export=download"
-
-    session = requests.Session()
-
-    # Initial request to get confirmation token
-    response = session.get(URL, params={'id': file_id}, stream=True)
-    token = _get_confirm_token(response)
-
-    if token:
-        params = {'id': file_id, 'confirm': token}
-        response = session.get(URL, params=params, stream=True)
-
-    _save_response_content(response, destination)
-
-def _get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            return value
-    return None
-
-def _save_response_content(response, destination):
-    CHUNK_SIZE = 32768  # Adjust the chunk size if needed
-
-    total_size_in_bytes = int(response.headers.get('content-length', 0))
-    progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True, desc=f'Downloading {os.path.basename(destination)}')
-
-    with open(destination, 'wb') as f:
-        for chunk in response.iter_content(CHUNK_SIZE):
-            if chunk:  # Filter out keep-alive new chunks
-                f.write(chunk)
-                progress_bar.update(len(chunk))
-    progress_bar.close()
-
-def _verify_file(file_path, expected_checksum):
+    Returns:
+    - bool: True if the checksum matches, False otherwise.
+    """
     sha256_hash = hashlib.sha256()
-    with open(file_path,"rb") as f:
-        for byte_block in iter(lambda: f.read(4096),b""):
+    with open(file_path, "rb") as f:
+        for byte_block in iter(lambda: f.read(8192), b""):
             sha256_hash.update(byte_block)
     calculated_checksum = sha256_hash.hexdigest()
     return calculated_checksum == expected_checksum
+
+def download_ceq_data(data_dir=DEFAULT_DATA_DIR):
+    """
+    Downloads and verifies the CEQ data files (causes.pkl.zip and effects.pkl.zip).
+
+    Parameters:
+    - data_dir (str): The directory where the data files will be saved and extracted.
+    """
+    # Google Drive file IDs for causes.pkl.zip and effects.pkl.zip
+    causes_file_id = '1TTYk5fXE3dcbobWIwl93DFtiYYRf7TYy'
+    effects_file_id = '1GC9bvpKe9FPP5LCT4yj1Z6YK9S0Ne0GD'
+
+    # Expected SHA256 checksums for the ZIP files
+    causes_checksum = '124116ee65624f230d62eb371a2a652b5053b9614bafebcd5742bb2527cc7df8'
+    effects_checksum = '1af3660ce51a18b1ffc8b34105fc4d0850b6b3fbf7769ce0d8028c5d7133f6af'
+
+    # Ensure the data directory exists
+    os.makedirs(data_dir, exist_ok=True)
+
+    # Paths for the ZIP files
+    causes_zip_path = os.path.join(data_dir, 'causes.pkl.zip')
+    effects_zip_path = os.path.join(data_dir, 'effects.pkl.zip')
+
+    # Download the zipped causes.pkl
+    print("Downloading causes.pkl.zip...")
+    download_file_from_google_drive(causes_file_id, causes_zip_path)
+
+    # Unzip causes.pkl.zip
+    unzip_file(causes_zip_path, data_dir)
+
+    # Verify checksum for causes.pkl
+    causes_pkl_path = os.path.join(data_dir, 'causes.pkl')
+    print("Verifying causes.pkl...")
+    if verify_checksum(causes_pkl_path, causes_checksum):
+        print("Checksum verification passed for causes.pkl.")
+    else:
+        print("Checksum verification failed for causes.pkl.")
+        print("The file may be corrupted. Please try downloading again.")
+        os.remove(causes_pkl_path)
+        exit(1)
+
+    # Download the zipped effects.pkl
+    print("Downloading effects.pkl.zip...")
+    download_file_from_google_drive(effects_file_id, effects_zip_path)
+
+    # Unzip effects.pkl.zip
+    unzip_file(effects_zip_path, data_dir)
+
+    # Verify checksum for effects.pkl
+    effects_pkl_path = os.path.join(data_dir, 'effects.pkl')
+    print("Verifying effects.pkl...")
+    if verify_checksum(effects_pkl_path, effects_checksum):
+        print("Checksum verification passed for effects.pkl.")
+    else:
+        print("Checksum verification failed for effects.pkl.")
+        print("The file may be corrupted. Please try downloading again.")
+        os.remove(effects_pkl_path)
+        exit(1)
+
+if __name__ == "__main__":
+    download_ceq_data()

@@ -4,13 +4,32 @@
 @Author   : Shaobo Cui
 @Date     : 22.10.2024 15:34
 """
+import os
 
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModel
+from transformers.utils import is_remote_url
+
 
 from . import CESAR
 from .models import CEQ
+from .utils.download_data import download_ceq_data
 from .visualization.causal_heatmap import plot_heatmap
+
+DEFAULT_DATA_DIR = os.path.expanduser('~/.causalstrength/data/')
+
+CACHE_DIR = os.path.expanduser('~/.cache/huggingface/hub')
+
+def model_is_cached(model_identifier):
+    """
+    Check if the Hugging Face model is already cached.
+    Transforms the model identifier to match the 'models--' directory format.
+    """
+    # Transform the model identifier to match the cache directory's format
+    model_dir_name = 'models--' + model_identifier.replace('/', '--')
+    # List cached files and check if the model is present
+    cached_files = os.listdir(CACHE_DIR)
+    return any(model_dir_name in f for f in cached_files)
 
 
 def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heatmap_flag=False, heatmap_path=None, **kwargs):
@@ -44,7 +63,11 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if model_name == 'CESAR':
-        model_identifier = model_path if model_path is not None else 'huggingfacesc/cesar-model'
+        model_identifier = model_path if model_path is not None else 'huggingfacesc/cesar-bert-large'
+
+        # Check if the model is already cached locally
+        if not model_is_cached(model_identifier):
+            print(f"Downloading {model_identifier} model from Hugging Face hub...")
         # Load the tokenizer
         try:
             tokenizer = AutoTokenizer.from_pretrained(model_identifier)
@@ -53,12 +76,12 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
 
         # Load the CESAR model using from_pretrained
         try:
-            print('*#'*40)
-            print('Start to load model from {}'.format(model_identifier))
-            print('*#'*40)
+            # print('*#'*40)
+            # print('Start to load model from {}'.format(model_identifier))
+            # print('*#'*40)
             model = CESAR.from_pretrained(model_identifier)
-            print('Finish the model loading process!')
-            print('*#'*40)
+            # print('Finish the model loading process!')
+            # print('*#'*40)
         except Exception as e:
             raise RuntimeError(f"Failed to load CESAR model from '{model_identifier}'. Error: {e}")
 
@@ -178,11 +201,19 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
         return causal_strength
 
     elif model_name == 'CEQ':
-        # Retrieve CEQ-specific parameters from kwargs
-        causes_path = kwargs.get('causes_path', 'data/causes.pkl')
-        effects_path = kwargs.get('effects_path', 'data/effects.pkl')
+        causes_path = kwargs.get('causes_path', os.path.join(DEFAULT_DATA_DIR, 'causes.pkl'))
+        effects_path = kwargs.get('effects_path', os.path.join(DEFAULT_DATA_DIR, 'effects.pkl'))
         alpha = kwargs.get('alpha', 0.66)
         lambda_ = kwargs.get('lambda_', 1.0)
+
+        # Check if causes and effects files exist, download if missing
+        if not os.path.exists(causes_path) or not os.path.exists(effects_path):
+            print(f"Downloading CEQ data to {DEFAULT_DATA_DIR}...")
+            os.makedirs(DEFAULT_DATA_DIR, exist_ok=True)
+            download_ceq_data(data_dir=DEFAULT_DATA_DIR)
+
+        if not os.path.exists(causes_path) or not os.path.exists(effects_path):
+            raise FileNotFoundError(f"Data files not found at {causes_path} or {effects_path}.")
 
         # Initialize the CEQ model
         try:
