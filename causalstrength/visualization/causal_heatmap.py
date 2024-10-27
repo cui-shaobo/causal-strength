@@ -15,7 +15,7 @@ import seaborn as sns
 import os
 
 
-def plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, save_path):
+def plot_causal_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, save_path):
     """
     Generate and save heatmap plots for CESAR model evaluations.
 
@@ -87,8 +87,8 @@ def plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_streng
     # print(cause_tokens)
     # print(effect_tokens)
 
-    print(cause_tokens)
-    print(effect_tokens)
+    # print(cause_tokens)
+    # print(effect_tokens)
     sns.heatmap(
         result,
         yticklabels=cause_tokens,
@@ -115,4 +115,4 @@ def plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_streng
     plt.savefig(save_path)
     plt.close(fig)  # Close the figure to free memory
 
-    print(f"Heatmap saved to {save_path}")
+    print(f"The causal heatmap is saved to {save_path}")

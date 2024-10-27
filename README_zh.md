@@ -98,20 +98,24 @@
 
 ### 生成因果热力图
 
-使用热力图可视化注意力和词汇间的相似度评分。
+使用热力图可视化 word-level 的 因果强度: 
 
 ```python
-from causalstrength.visualization.causal_heatmap import generate_causal_heatmap
+from causalstrength.visualization.causal_heatmap import plot_causal_heatmap
 
 # Statements to visualize
-s1 = "Fire starts."
-s2 = "House burns."
+s1 = "Tom is very hungry now."
+s2 = "He goes to McDonald for some food."
 
 # Generate heatmap
-generate_causal_heatmap(
+plot_causal_heatmap(
     s1,
     s2,
-    model_name='YourUsername/cesar-model',
+    model_name='huggingfacesc/cesar-bert-large',
     save_path='causal_heatmap.pdf'
 )
 ```
+
+## 📚 引用 ![References](https://img.shields.io/badge/References-Scholarly-green)
+1. Cui, Shaobo, et al. "Exploring Defeasibility in Causal Reasoning." Findings of the Association for Computational Linguistics ACL 2024. 2024. 
+2. Du, Li, et al. "e-CARE: a New Dataset for Exploring Explainable Causal Reasoning." Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). 2022.

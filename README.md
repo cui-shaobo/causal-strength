@@ -96,13 +96,13 @@ Here's a quick example to evaluate the causal strength between two statements:
 ```python
 from causalstrength import evaluate
 
-# Define your statements
-cause = "Fire starts."
-effect = "House burns."
+# Test CESAR Model
+s1_cesar = "Tom is very hungry now."
+s2_cesar = "He goes to McDonald for some food."
 
-# Evaluate causal strength
-score = evaluate(cause, effect, model_name='CESAR', model_path='YourUsername/cesar-model')
-print(f'Causal strength between "{cause}" and "{effect}" is {score:.2f}')
+print("Testing CESAR model:")
+cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large')
+print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
 ```
 
 ### Evaluating Causal Strength
@@ -115,7 +115,7 @@ The `evaluate` function computes the causal strength between two statements.
     from causalstrength import evaluate
     
     # Test CESAR Model
-    s1_cesar = "Tom is very full now."
+    s1_cesar = "Tom is very hungry now."
     s2_cesar = "He goes to McDonald for some food."
     
     print("Testing CESAR model:")
@@ -127,8 +127,8 @@ The `evaluate` function computes the causal strength between two statements.
     from causalstrength import evaluate
 
     # Test CEQ Model
-    s1_ceq = "Tom eats too much food."
-    s2_ceq = "He feels sick."
+    s1_ceq = "Tom is very hungry now."
+    s2_ceq = "He goes to McDonald for some food."
     
     print("\nTesting CEQ model:")
     ceq_score = evaluate(s1_ceq, s2_ceq, model_name='CEQ')
@@ -146,21 +146,21 @@ The `evaluate` function computes the causal strength between two statements.
 
 Visualize the attention and similarity scores between tokens using heatmaps.
 
-    ```python
-    from causalstrength.visualization.causal_heatmap import generate_causal_heatmap
-    
-    # Statements to visualize
-    s1 = "Fire starts."
-    s2 = "House burns."
-    
-    # Generate heatmap
-    generate_causal_heatmap(
-        s1,
-        s2,
-        model_name='YourUsername/cesar-model',
-        save_path='causal_heatmap.pdf'
-    )
-    ```
+```python
+from causalstrength.visualization.causal_heatmap import plot_causal_heatmap
+
+# Statements to visualize
+s1 = "Tom is very hungry now."
+s2 = "He goes to McDonald for some food."
+
+# Generate heatmap
+plot_causal_heatmap(
+    s1,
+    s2,
+    model_name='huggingfacesc/cesar-bert-large',
+    save_path='causal_heatmap.pdf'
+)
+```
 
 [//]: # (## Acknowledgments)
 

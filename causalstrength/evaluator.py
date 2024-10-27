@@ -14,7 +14,7 @@ from transformers.utils import is_remote_url
 from . import CESAR
 from .models import CEQ
 from .utils.download_data import download_ceq_data
-from .visualization.causal_heatmap import plot_heatmap
+from .visualization.causal_heatmap import plot_causal_heatmap
 
 DEFAULT_DATA_DIR = os.path.expanduser('~/.causalstrength/data/')
 
@@ -159,10 +159,10 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
             effect_tokens = [token.replace('##', '') for token, valid in zip(tokens, effect_indices) if valid and token not in ('[CLS]', '[SEP]')]
 
             # Print shapes for debugging
-            print(f"Original score_map shape: {score_map.shape}")
-            print(f"Original attn_map shape: {attn_map.shape}")
-            print(f"Number of cause tokens: {len(cause_tokens)}")
-            print(f"Number of effect tokens: {len(effect_tokens)}")
+            # print(f"Original score_map shape: {score_map.shape}")
+            # print(f"Original attn_map shape: {attn_map.shape}")
+            # print(f"Number of cause tokens: {len(cause_tokens)}")
+            # print(f"Number of effect tokens: {len(effect_tokens)}")
 
             # Determine if score_map is 3D or 2D
             if score_map.dim() == 3:
@@ -180,8 +180,8 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
                 raise ValueError(f"Unexpected score_map dimensions: {score_map.dim()}")
 
             # Print sliced shapes for verification
-            print(f"Sliced score_map shape: {score_map.shape}")
-            print(f"Sliced attn_map shape: {attn_map.shape}")
+            # print(f"Sliced score_map shape: {score_map.shape}")
+            # print(f"Sliced attn_map shape: {attn_map.shape}")
 
             # Check if the sliced score_map and attn_map match the number of tokens
             if score_map.shape[0] != len(cause_tokens) or score_map.shape[1] != len(effect_tokens):
@@ -196,7 +196,7 @@ def evaluate(s1, s2, model_name='CESAR', model_path=None, device=None, plot_heat
 
             # Generate heatmap
             # print('*#' * 20)
-            plot_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, heatmap_path)
+            plot_causal_heatmap(score_map, attn_map, cause_tokens, effect_tokens, causal_strength, heatmap_path)
 
         return causal_strength
 
