@@ -116,6 +116,6 @@ plot_causal_heatmap(
 )
 ```
 
-## 📚 引用 ![References](https://img.shields.io/badge/References-Scholarly-green)
+## 📚 参考文献 ![References](https://img.shields.io/badge/References-Scholarly-green)
 1. Cui, Shaobo, et al. "Exploring Defeasibility in Causal Reasoning." Findings of the Association for Computational Linguistics ACL 2024. 2024. 
 2. Du, Li, et al. "e-CARE: a New Dataset for Exploring Explainable Causal Reasoning." Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers). 2022.
