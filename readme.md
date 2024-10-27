@@ -1,4 +1,4 @@
-# Measure the Strength Between Cause and Effect
+# causal-strength  ![Causal Strength](https://img.shields.io/badge/causal--strength-%E2%9A%96%EF%B8%8F%20measurement%20of%20causality-blue)  Measure the Strength Between Cause and Effect
 
 <a href="https://aclanthology.org/2024.findings-acl.384/">
     <img src="https://img.shields.io/badge/2024.findings-acl.384-blue.svg?style=flat-square" alt="ACL Anthology" />
@@ -6,6 +6,7 @@
 <a href="https://pypi.org/project/causal-strength/">
     <img src="https://img.shields.io/pypi/v/causal-strength?style=flat-square" alt="PyPI version" />
 </a>
+
 
 
 **causal-strength** is a Python package for evaluating the causal strength between statements using various metrics such as CESAR (Causal Embedding Similarity with Attention Reweighting). This package leverages pre-trained models available on [Hugging Face Transformers](https://huggingface.co/) for efficient and scalable computations.
@@ -23,9 +24,9 @@
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
-## Citation
+## 📜 Citation ![Citation](https://img.shields.io/badge/Citation-Required-green) 
 
-If you find this package helpful, please star [this repository](https://github.com/cui-shaobo/causalstrength) and the related repository: [defeasibility-in-causality](https://github.com/cui-shaobo/defeasibility-in-causality). For academic purposes, please cite our paper:
+If you find this package helpful, please star this repository [causal-strength](https://github.com/cui-shaobo/causal-strength) and the related repository: [defeasibility-in-causality](https://github.com/cui-shaobo/defeasibility-in-causality). For academic purposes, please cite our paper:
 
 ```bibtex
 @inproceedings{cui-etal-2024-exploring,
@@ -49,14 +50,14 @@ If you find this package helpful, please star [this repository](https://github.c
 ```
 
 
-## Features
+## 🌟 Features ![Key Features](https://img.shields.io/badge/Key_Features-Highlights-orange) 
 
 - **Causal Strength Evaluation**: Compute the causal strength between two statements using models like CESAR.
 - **Visualization Tools**: Generate heatmaps to visualize attention and similarity scores between tokens.
 - **Extensibility**: Easily add new metrics and models for evaluation.
 - **Hugging Face Integration**: Load models directly from the Hugging Face Model Hub.
 
-## Installation
+## 🚀 Installation ![Installation](https://img.shields.io/badge/Installation-Guide-blue)
 
 ### Prerequisites
 
@@ -70,13 +71,17 @@ If you find this package helpful, please star [this repository](https://github.c
 
    ```bash
    git clone https://github.com/yourusername/causalstrength.git
-   cd causalstrength
+   cd causal-strength
    ```
 
 2. **Install the Package**
 
 
-## Quick Start
+
+
+## 🛠️ Usage  ![Usage](https://img.shields.io/badge/Usage-Instructions-green)
+
+### Quick Start
 Here's a quick example to evaluate the causal strength between two statements:
 
 ```python
@@ -90,8 +95,6 @@ effect = "House burns."
 score = evaluate(cause, effect, model_name='CESAR', model_path='YourUsername/cesar-model')
 print(f'Causal strength between "{cause}" and "{effect}" is {score:.2f}')
 ```
-
-## Usage
 
 ### Evaluating Causal Strength
 

@@ -1,5 +1,5 @@
 """
-@Project  : causalstrength
+@Project  : causal-strength
 @File     : plot_heatmap.py
 @Author   : Shaobo Cui
 @Date     : 22.10.2024 15:34

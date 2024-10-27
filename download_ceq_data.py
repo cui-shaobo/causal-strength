@@ -1,5 +1,5 @@
 """
-@Project  : causalstrength
+@Project  : causal-strength
 @File     : download_ceq_data.py
 @Author   : Shaobo Cui
 @Date     : 23.10.2024 16:18

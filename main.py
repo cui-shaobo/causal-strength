@@ -5,11 +5,11 @@ from causalstrength import CESAR
 from causalstrength.models import CESARConfig
 
 # Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained('YourUsername/cesar-model')
+tokenizer = AutoTokenizer.from_pretrained('huggingfacesc/cesar-bert-large')
 
 # Load the model
-config = CESARConfig.from_pretrained('YourUsername/cesar-model')
-model = CESAR.from_pretrained('YourUsername/cesar-model', config=config)
+config = CESARConfig.from_pretrained('huggingfacesc/cesar-bert-large')
+model = CESAR.from_pretrained('huggingfacesc/cesar-bert-large', config=config)
 
 # Prepare inputs
 s1 = "Fire starts."

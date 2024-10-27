@@ -1,5 +1,5 @@
 """
-@Project  : causalstrength
+@Project  : causal-strength
 @File     : evaluator.py
 @Author   : Shaobo Cui
 @Date     : 22.10.2024 15:34
