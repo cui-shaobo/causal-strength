@@ -7,6 +7,10 @@
 <a href="https://pypi.org/project/causal-strength/">
     <img src="https://img.shields.io/pypi/v/causal-strength?style=flat-square" alt="PyPI version" />
 </a>
+<a href="https://huggingface.co/shaobocui/cesar-bert-large">
+    <img src="https://img.shields.io/badge/Hugging%20Face-cesar--bert--large-blue?logo=huggingface&style=flat-square" alt="Hugging Face Model" />
+</a>
+
 
 
 
