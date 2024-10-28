@@ -71,7 +71,7 @@
     s2_cesar = "He goes to McDonald for some food."
     
     print("Testing CESAR model:")
-    cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large')
+    cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='shaobocui/cesar-bert-large')
     print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
     ```
     输出如下: 
@@ -121,7 +121,7 @@ s2 = "He goes to McDonald for some food."
 plot_causal_heatmap(
     s1,
     s2,
-    model_name='huggingfacesc/cesar-bert-large',
+    model_name='shaobocui/cesar-bert-large',
     save_path='causal_heatmap.pdf'
 )
 ```
