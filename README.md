@@ -167,19 +167,15 @@ The `evaluate` function computes the causal strength between two statements.
 Visualize the attention and similarity scores between tokens using heatmaps.
 
 ```python
-from causalstrength.visualization.causal_heatmap import plot_causal_heatmap
+from causalstrength import evaluate
 
-# Statements to visualize
-s1 = "Tom is very hungry now."
-s2 = "He goes to McDonald for some food."
+# Test CESAR Model
+s1_cesar = "Fire starts quickly."
+s2_cesar = "House burns to ashes."
 
-# Generate heatmap
-plot_causal_heatmap(
-    s1,
-    s2,
-    model_name='shaobocui/cesar-bert-large',
-    save_path='causal_heatmap.png'
-)
+print("Testing CESAR model:")
+cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='shaobocui/cesar-bert-large',
+                       plot_heatmap_flag=True, heatmap_path=f'./figures/causal_heatmap.png')
 ```
 This will now output the following without errors:
 ```plaintext
