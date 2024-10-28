@@ -23,10 +23,15 @@ class DownloadDataCommand(Command):
         from causalstrength.utils.download_data import download_ceq_data
         download_ceq_data()
 
+readme = open('README.md').read()
+
+
 setup(
     name='causal-strength',
     version='0.1.0',
     description='A package for evaluating causal strength intensity between cause and effect.',
+    long_description=readme,
+    long_description_content_type="text/markdown",
     author='Shaobo Cui',
     author_email='shaobo.cui@epfl.ch',
     url='https://github.com/cui-shaobo/causal-strength',  # Update with your repository URL

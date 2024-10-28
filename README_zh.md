@@ -66,27 +66,37 @@
     ```python
     from causalstrength import evaluate
     
-    # Define your statements
-    cause = "Fire starts."
-    effect = "House burns."
+    # Test CESAR Model
+    s1_cesar = "Tom is very hungry now."
+    s2_cesar = "He goes to McDonald for some food."
     
-    # Evaluate causal strength
-    score = evaluate(cause, effect, model_name='CESAR', model_path='YourUsername/cesar-model')
-    print(f'Causal strength between "{cause}" and "{effect}" is {score:.2f}')
+    print("Testing CESAR model:")
+    cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large')
+    print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
     ```
-    
+    输出如下: 
+    ```plaintext
+    Testing CESAR model:
+    CESAR Causal strength between "Tom is very hungry now." and "He goes to McDonald for some food.": 0.4482
+    ```
+   
 2. 使用 CEQ 模型:
 
    ```python
     from causalstrength import evaluate
 
     # Test CEQ Model
-    s1_ceq = "Tom eats too much food."
-    s2_ceq = "He feels sick."
+    s1_ceq = "Tom is very hungry now."
+    s2_ceq = "He goes to McDonald for some food."
     
     print("\nTesting CEQ model:")
     ceq_score = evaluate(s1_ceq, s2_ceq, model_name='CEQ')
     print(f"CEQ Causal strength between \"{s1_ceq}\" and \"{s2_ceq}\": {ceq_score:.4f}")
+    ```
+    输出如下: 
+    ```plaintext
+    Testing CEQ model:
+    CEQ Causal strength between "Tom is very hungry now." and "He goes to McDonald for some food.": 0.0168
     ```
 
 **参数说明：**
@@ -115,6 +125,16 @@ plot_causal_heatmap(
     save_path='causal_heatmap.pdf'
 )
 ```
+
+输出如下: 
+```plaintext
+Testing CESAR model:
+Warning: The sliced score_map dimensions do not match the number of tokens.
+The causal heatmap is saved to ./figures/causal_heatmap.png
+```
+
+The causal heatmap is as follows: 
+![Example Image](https://github.com/cui-shaobo/causal-strength/raw/main/images/img.png)
 
 ## 📚 参考文献 ![References](https://img.shields.io/badge/References-Scholarly-green)
 1. Cui, Shaobo, et al. "Exploring Defeasibility in Causal Reasoning." Findings of the Association for Computational Linguistics ACL 2024. 2024. 

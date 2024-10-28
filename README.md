@@ -1,4 +1,4 @@
-<small>EN | [简体中文](README_zh.md) </small>
+<small>EN | [简体中文](https://github.com/cui-shaobo/causal-strength/blob/main/README_zh.md) </small>
 # causal-strength  ![Causal Strength](https://img.shields.io/badge/causal--strength-%E2%9A%96%EF%B8%8F%20measurement%20of%20causality-blue) : Measure the Strength Between Cause and Effect
 
 <a href="https://aclanthology.org/2024.findings-acl.384/">
@@ -70,7 +70,6 @@ If you find this package helpful, please star this repository [causal-strength](
 
 - Python 3.7 or higher
 - [PyTorch](https://pytorch.org/) (for GPU support, ensure CUDA is properly configured)
-- [Git](https://git-scm.com/)
 
 ### Steps
 
@@ -105,6 +104,13 @@ cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggi
 print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
 ```
 
+This will output the following without errors:
+```plaintext
+Testing CESAR model:
+CESAR Causal strength between "Tom is very hungry now." and "He goes to McDonald for some food.": 0.4482
+```
+
+
 ### Evaluating Causal Strength
 
 The `evaluate` function computes the causal strength between two statements.
@@ -122,6 +128,11 @@ The `evaluate` function computes the causal strength between two statements.
     cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='huggingfacesc/cesar-bert-large')
     print(f"CESAR Causal strength between \"{s1_cesar}\" and \"{s2_cesar}\": {cesar_score:.4f}")
     ```
+   This will now output the following without errors:
+    ```plaintext
+    Testing CESAR model:
+    CESAR Causal strength between "Tom is very hungry now." and "He goes to McDonald for some food.": 0.4482
+    ```
 2. For the CEQ model
    ```python
     from causalstrength import evaluate
@@ -133,6 +144,11 @@ The `evaluate` function computes the causal strength between two statements.
     print("\nTesting CEQ model:")
     ceq_score = evaluate(s1_ceq, s2_ceq, model_name='CEQ')
     print(f"CEQ Causal strength between \"{s1_ceq}\" and \"{s2_ceq}\": {ceq_score:.4f}")
+    ```
+   This will now output the following without errors:
+    ```plaintext
+    Testing CEQ model:
+    CEQ Causal strength between "Tom is very hungry now." and "He goes to McDonald for some food.": 0.0168
     ```
 
 **Parameters:**
@@ -158,9 +174,21 @@ plot_causal_heatmap(
     s1,
     s2,
     model_name='huggingfacesc/cesar-bert-large',
-    save_path='causal_heatmap.pdf'
+    save_path='causal_heatmap.png'
 )
 ```
+This will now output the following without errors:
+```plaintext
+Testing CESAR model:
+Warning: The sliced score_map dimensions do not match the number of tokens.
+The causal heatmap is saved to ./figures/causal_heatmap.png
+```
+
+The causal heatmap is as follows: 
+![Example Image](https://github.com/cui-shaobo/causal-strength/raw/main/images/img.png)
+
+
+
 
 [//]: # (## Acknowledgments)
 
