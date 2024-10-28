@@ -180,7 +180,6 @@ cesar_score = evaluate(s1_cesar, s2_cesar, model_name='CESAR', model_path='shaob
 This will now output the following without errors:
 ```plaintext
 Testing CESAR model:
-Warning: The sliced score_map dimensions do not match the number of tokens.
 The causal heatmap is saved to ./figures/causal_heatmap.png
 ```
 
