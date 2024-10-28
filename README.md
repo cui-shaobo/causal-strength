@@ -185,7 +185,7 @@ The causal heatmap is saved to ./figures/causal_heatmap.png
 ```
 
 The causal heatmap is as follows: 
-![Example Image](https://github.com/cui-shaobo/causal-strength/raw/main/images/img.png)
+![Example Image](https://github.com/cui-shaobo/public-images/raw/main/causal-strength/heatmap.png)
 
 
 

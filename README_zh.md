@@ -134,7 +134,7 @@ The causal heatmap is saved to ./figures/causal_heatmap.png
 ```
 
 The causal heatmap is as follows: 
-![Example Image](https://github.com/cui-shaobo/causal-strength/raw/main/images/img.png)
+![Example Image](https://github.com/cui-shaobo/public-images/raw/main/causal-strength/heatmap.png)
 
 ## 📚 参考文献 ![References](https://img.shields.io/badge/References-Scholarly-green)
 1. Cui, Shaobo, et al. "Exploring Defeasibility in Causal Reasoning." Findings of the Association for Computational Linguistics ACL 2024. 2024. 
